@@ -1,26 +1,20 @@
 import MapKit
 
+struct MKZoomLevel {}
+
 public extension MKMapView {
     
     // MARK: Zoom Level Getter & Setter
     
     var zoomLevel: CGFloat {
-        get {
-            let longitudeDeltaAtRightAngle = MKZoomLevel.longitudeDeltaAtRightAngle(of: self.camera, in: self.bounds)
-            return zoomLevel(from: longitudeDeltaAtRightAngle)
-        }
-        set {
-            self.setZoomLevel(newValue, animated: false)
-        }
+        get { return zoomLevel(from: bottomLongitudeDelta) }
+        set { self.setZoomLevel(newValue, animated: false)}
     }
     
     func setZoomLevel(_ zoomLevel: CGFloat, animated: Bool) {
-        let longitudeDeltaAtRightAngle = longitudeDelta(from: zoomLevel)
-        let longitudeDistanceAtRightAngle = CLLocation(latitude: centerCoordinate.latitude, longitude: longitudeDeltaAtRightAngle).distance(from: CLLocation(latitude: centerCoordinate.latitude, longitude: 0))
-        
-        let region = MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 0, longitudinalMeters: longitudeDistanceAtRightAngle)
-        
-        let centerCoordinateDistance = MKZoomLevel.centerCoordinateDistanceAtRightAngle(of: region, in: self.bounds)
+        let fromBottomLongitudeDelta = bottomLongitudeDelta
+        let toBottomLongitudeDelta = longitudeDelta(from: zoomLevel)
+        let centerCoordinateDistance = self.camera.centerCoordinateDistance * (toBottomLongitudeDelta / fromBottomLongitudeDelta)
         
         let camera = MKMapCamera(
             lookingAtCenter: self.camera.centerCoordinate,
@@ -41,26 +35,54 @@ public extension MKMapView {
     private func longitudeDelta(from zoomLevel: CGFloat) -> CLLocationDegrees {
         return CLLocationDistance(360 * self.frame.size.width / (128 * exp2(zoomLevel)))
     }
-}
-
-// MARK: Calculation
-
-struct MKZoomLevel {
     
-    static private var computingMapView = MKMapView()
-    static private var lock = NSLock()
+    // MARK: Calculation
     
-    static func longitudeDeltaAtRightAngle(of camera: MKMapCamera, in bounds: CGRect) -> CLLocationDegrees {
-        lock.lock(); defer { lock.unlock() }
-        computingMapView.bounds = bounds
-        computingMapView.camera = MKMapCamera(lookingAtCenter: camera.centerCoordinate, fromDistance: camera.centerCoordinateDistance, pitch: 0, heading: 0)
-        return computingMapView.region.span.longitudeDelta
+    private var bottomLongitudeDelta: CLLocationDegrees {
+        let bottomCoordinates = self.bottomCoordinatesAtPrimeMeridian
+        let bottomLongitudeDeltaHorizontalComponent = bottomCoordinates.southEast.longitude - bottomCoordinates.northWest.longitude
+        let bottomLongitudeDelta = bottomLongitudeDeltaHorizontalComponent / cos(positiveHeading)
+        return bottomLongitudeDelta
     }
     
-    static func centerCoordinateDistanceAtRightAngle(of region: MKCoordinateRegion, in bounds: CGRect) -> CLLocationDistance {
-        lock.lock(); defer { lock.unlock() }
-        computingMapView.bounds = bounds
-        computingMapView.region = region
-        return computingMapView.camera.centerCoordinateDistance
+    private var positiveHeading: CLLocationDirection {
+        let bottomCoordinates = self.bottomCoordinatesAtPrimeMeridian
+        
+        let p1 = MKMapPoint(bottomCoordinates.northWest)
+        let p2 = MKMapPoint(bottomCoordinates.southEast)
+        
+        let width = p2.x - p1.x
+        let height = p2.y - p1.y
+        let hypotenuse = hypot(width, height)
+        
+        let heading = asin(height / hypotenuse)
+        
+        return heading
+    }
+    
+    private var bottomCoordinatesAtPrimeMeridian: (northWest: CLLocationCoordinate2D, southEast: CLLocationCoordinate2D) {
+        let bottomRect = CGRect(x: 0, y: bounds.height, width: bounds.width, height: 0)
+        
+        /// If you calculate the distance using two points from`convert(_:toCoordinateFrom:)`
+        /// instead of a region from `convert(_:toRegionFrom)`,
+        /// it is hard to check if the two points cross the 180th meridian
+        /// considering the case when the map heads to the south.
+        var region = self.convert(bottomRect, toRegionFrom: self)
+        
+        /// Normalize the longtidue of the center coordinate into the prime meridian
+        /// in order to prevent incorrect distance from being calculated
+        /// when the `region` crosses the 180th meridian.
+        region.center.longitude = 0
+        
+        let northWestCoordinate = CLLocationCoordinate2D(
+            latitude: region.center.latitude + (region.span.latitudeDelta / 2),
+            longitude: region.center.longitude - (region.span.longitudeDelta / 2)
+        )
+        let southEastCoordinate = CLLocationCoordinate2D(
+            latitude: region.center.latitude - (region.span.latitudeDelta / 2),
+            longitude: region.center.longitude + (region.span.longitudeDelta / 2)
+        )
+        
+        return (northWestCoordinate, southEastCoordinate)
     }
 }
