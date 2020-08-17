@@ -12,22 +12,22 @@ public extension MKMapView {
     }
     
     func setZoomLevel(_ zoomLevel: CGFloat, animated: Bool) {
-        let fromBottomLongitudeDelta = bottomLongitudeDelta
-        let toBottomLongitudeDelta = longitudeDelta(from: zoomLevel)
+        let oldBottomLongitudeDelta = bottomLongitudeDelta
+        let newBottomLongitudeDelta = longitudeDelta(from: zoomLevel)
         
-        let fromCenterCoordinateDistance: CLLocationDistance
+        let oldCenterCoordinateDistance: CLLocationDistance
         if #available(iOS 13.0, *) {
-            fromCenterCoordinateDistance = self.camera.centerCoordinateDistance
+            oldCenterCoordinateDistance = self.camera.centerCoordinateDistance
         } else {
             let pitchInRadians = self.camera.pitch * (.pi / 180)
-            fromCenterCoordinateDistance = self.camera.altitude / cos(Double(pitchInRadians))
+            oldCenterCoordinateDistance = self.camera.altitude / cos(Double(pitchInRadians))
         }
         
-        let toCenterCoordinateDistance = fromCenterCoordinateDistance * (toBottomLongitudeDelta / fromBottomLongitudeDelta)
+        let newCenterCoordinateDistance = oldCenterCoordinateDistance * (newBottomLongitudeDelta / oldBottomLongitudeDelta)
         
         let camera = MKMapCamera(
             lookingAtCenter: self.camera.centerCoordinate,
-            fromDistance: toCenterCoordinateDistance,
+            fromDistance: newCenterCoordinateDistance,
             pitch: self.camera.pitch,
             heading: self.camera.heading
         )
