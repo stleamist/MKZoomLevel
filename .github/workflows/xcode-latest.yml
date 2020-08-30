@@ -1,0 +1,37 @@
+# For more information about the environments,
+# see https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md
+
+name: Build on Xcode (latest)
+
+on:
+  push:
+    branches: '**'
+  pull_request:
+    branches: '**'
+
+jobs:
+  build:
+    name: Build ${{ matrix.scheme }} for ${{ matrix.sdk }}
+    runs-on: macos-latest
+    
+    env:
+      custom_developer_dir: ${{ null }}
+    
+    strategy:
+      matrix:
+        scheme: [MKZoomLevel]
+        sdk: [iphoneos, macosx, appletvos]
+        include:
+          - scheme: MKZoomLevelDemo
+            sdk: iphonesimulator
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Switch developer directory to ${{ env.custom_developer_dir }}
+        if: ${{ env.custom_developer_dir != null }}
+        run: sudo xcode-select --switch "${{ env.custom_developer_dir }}"
+        
+      - name: Build ${{ matrix.scheme }} for ${{ matrix.sdk }}
+        run: xcodebuild build-for-testing -scheme "${{ matrix.scheme }}" -sdk "${{ matrix.sdk }}"
