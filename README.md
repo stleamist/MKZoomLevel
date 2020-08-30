@@ -4,6 +4,10 @@
 </p>
 
 # MKZoomLevel
+
+[![Build on Xcode (latest)](https://github.com/stleamist/MKZoomLevel/workflows/Build%20on%20Xcode%20(latest)/badge.svg)](https://github.com/stleamist/MKZoomLevel/actions?query=workflow%3A%22Build+on+Xcode+%28latest%29%22)
+[![Build on Xcode (12 beta)](https://github.com/stleamist/MKZoomLevel/workflows/Build%20on%20Xcode%20(12%20beta)/badge.svg)](https://github.com/stleamist/MKZoomLevel/actions?query=workflow%3A%22Build+on+Xcode+%2812+beta%29%22)
+
 MKZoomLevel is an implementation of zoom level getter & setter for MKMapView that works exactly the same as the private `_zoomLevel` property without resetting the camera angle.
 
 ## Features
