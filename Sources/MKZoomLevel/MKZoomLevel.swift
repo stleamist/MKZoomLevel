@@ -2,6 +2,8 @@ import MapKit
 
 struct MKZoomLevel {}
 
+@available(iOS 9.0, macOS 10.11, tvOS 9.2, *)
+@available(watchOS, unavailable)
 public extension MKMapView {
     
     // MARK: Zoom Level Getter & Setter
@@ -16,7 +18,7 @@ public extension MKMapView {
         let newBottomLongitudeDelta = longitudeDelta(from: zoomLevel)
         
         let oldCenterCoordinateDistance: CLLocationDistance
-        if #available(iOS 13.0, *) {
+        if #available(iOS 13.0, macOS 10.15, tvOS 13.0, *) {
             oldCenterCoordinateDistance = self.camera.centerCoordinateDistance
         } else {
             let pitchInRadians = self.camera.pitch * (.pi / 180)
