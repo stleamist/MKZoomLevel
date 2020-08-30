@@ -30,6 +30,9 @@
     <a href="https://swift.org/package-manager/">
         <img src="https://img.shields.io/badge/SwiftPM-compatible-29CC52?labelColor=303840" alt="SwiftPM: compatible">
     </a>
+    <a href="/LICENSE">
+            <img src="https://img.shields.io/github/license/stleamist/MKZoomLevel?color=blue&labelColor=303840" alt="license">
+        </a>
     <a href="https://twitter.com/stleamist">
         <img src="https://img.shields.io/badge/contact-@stleamist-1DA1F2?labelColor=303840" alt="contact: @stleamist">
     </a>
