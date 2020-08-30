@@ -3,11 +3,39 @@
     <img src="/Docs/Images/MKZoomLevel-Logotype.svg">
 </p>
 
+<p align="center">
+    <a href="https://github.com/stleamist/MKZoomLevel/releases/latest">
+        <img src="https://img.shields.io/github/v/tag/stleamist/MKZoomLevel?label=version&labelColor=303840" alt="version">
+    </a>
+    <a href="https://swift.org/">
+        <img src="https://img.shields.io/badge/Swift-5.0+-F05138?labelColor=303840" alt="Swift: 5.0+">
+    </a>
+    <a href="https://www.apple.com/ios/">
+        <img src="https://img.shields.io/badge/iOS-9.0+-007AFF?labelColor=303840" alt="iOS: 9.0+">
+    </a>
+    <a href="https://www.apple.com/macos/">
+        <img src="https://img.shields.io/badge/macOS-10.11+-007AFF?labelColor=303840" alt="macOS: 10.11+">
+    </a>
+    <a href="https://developer.apple.com/tvos/">
+        <img src="https://img.shields.io/badge/tvOS-9.2+-007AFF?labelColor=303840" alt="tvOS: 9.2+">
+    </a>
+    <br>
+    <a href="https://github.com/stleamist/MKZoomLevel/actions?query=workflow%3A%22Build+on+Xcode+%28latest%29%22">
+        <img src="https://github.com/stleamist/MKZoomLevel/workflows/Build%20on%20Xcode%20(latest)/badge.svg" alt="Build on Xcode (latest)">
+    </a>
+    <a href="https://github.com/stleamist/MKZoomLevel/actions?query=workflow%3A%22Build+on+Xcode+%2812+beta%29%22">
+        <img src="https://github.com/stleamist/MKZoomLevel/workflows/Build%20on%20Xcode%20(12%20beta)/badge.svg" alt="Build on Xcode (12 beta)">
+    </a>
+    <br>
+    <a href="https://swift.org/package-manager/">
+        <img src="https://img.shields.io/badge/SwiftPM-compatible-29CC52?labelColor=303840" alt="SwiftPM: compatible">
+    </a>
+    <a href="https://twitter.com/stleamist">
+        <img src="https://img.shields.io/badge/contact-@stleamist-1DA1F2?labelColor=303840" alt="contact: @stleamist">
+    </a>
+</p>
+
 # MKZoomLevel
-
-[![Build on Xcode (latest)](https://github.com/stleamist/MKZoomLevel/workflows/Build%20on%20Xcode%20(latest)/badge.svg)](https://github.com/stleamist/MKZoomLevel/actions?query=workflow%3A%22Build+on+Xcode+%28latest%29%22)
-[![Build on Xcode (12 beta)](https://github.com/stleamist/MKZoomLevel/workflows/Build%20on%20Xcode%20(12%20beta)/badge.svg)](https://github.com/stleamist/MKZoomLevel/actions?query=workflow%3A%22Build+on+Xcode+%2812+beta%29%22)
-
 MKZoomLevel is an implementation of zoom level getter & setter for MKMapView that works exactly the same as the private `_zoomLevel` property without resetting the camera angle.
 
 ## Features
