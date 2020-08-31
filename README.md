@@ -68,14 +68,14 @@ mapView.setZoomLevel(16.0, animated: true)
 Add this repository as a dependency in your [`Package.swift`](https://developer.apple.com/documentation/swift_packages/package):
 
 ```swift
-// swift-tools-version:5.1
+// swift-tools-version:5.0
 
 import PackageDescription
 
 let package = Package(
     ...,
     dependencies: [
-        .package(url: "https://github.com/stleamist/MKZoomLevel.git", .upToNextMajor(from: "1.0.0"))
+        .package(url: "https://github.com/stleamist/MKZoomLevel.git", .upToNextMajor(from: "1.2.0"))
     ],
     ...
 )
