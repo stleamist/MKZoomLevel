@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "MKZoomLevel",
     platforms: [
-        .iOS(.v9), .macOS(.v10_11), .tvOS(.v9)
+        .iOS(.v9), .macOS(.v10_11), .tvOS("9.2")
     ],
     products: [
         .library(
